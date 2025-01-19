@@ -1,12 +1,13 @@
 import os
 import keyboard
 import pandas as pd
+from settings import ROOT_PATH
 
 
 class Controller:
 
     def __init__(self, sheet):
-        df = pd.read_excel(os.path.join(os.getcwd(), 'maps.xlsx'), sheet_name=sheet, index_col=0)
+        df = pd.read_excel(os.path.join(ROOT_PATH, 'data', 'maps.xlsx'), sheet_name=sheet, index_col=0)
         self.map = df.replace({'↑': '5', '↓': '2', '→': '3', '←': '1'})
         self.previous_position = [None, None]
 

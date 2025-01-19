@@ -1,15 +1,17 @@
+import os
 import time
 import pytesseract
 import pygame
 from screenshot import Screenshot
 from controller import Controller
+from settings import ROOT_PATH
 
 # Settings
-time.sleep(2)
 pytesseract.pytesseract.tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe"
+time.sleep(2)
 
 # Init Controller object
-controller = Controller('Otomai')
+controller = Controller('Blops')
 
 # Loop until archi is found
 while True:
@@ -24,7 +26,7 @@ while True:
         print('Archi found')
         break
     # Else move to next position if position successfully read
-    elif screenshot.x and screenshot.y:
+    elif screenshot.x is not None and screenshot.y is not None:
         controller.move(screenshot.x, screenshot.y)
 
     # Wait a second
@@ -32,7 +34,7 @@ while True:
 
 # Alert user with shrek song
 pygame.mixer.init()
-pygame.mixer.music.load('shrek.mp3')
+pygame.mixer.music.load(os.path.join(ROOT_PATH, 'data', 'shrek.mp3'))
 pygame.mixer.music.play()
 while pygame.mixer.music.get_busy():
     pygame.time.Clock().tick(10)

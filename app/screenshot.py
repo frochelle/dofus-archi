@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import pyautogui
 import pytesseract
+from settings import ROOT_PATH
 
 
 class Screenshot:
@@ -12,7 +13,7 @@ class Screenshot:
         self.image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_BGR2GRAY)
         self.coordinates_image = np.array(screenshot.crop((0, 75, 150, 110)))
         self.x, self.y = self.get_coordinates()
-        self.archi = cv2.imread(os.path.join(os.getcwd(), 'picto_archi.png'), cv2.IMREAD_GRAYSCALE)
+        self.archi = cv2.imread(os.path.join(ROOT_PATH, 'data', 'picto_archi.PNG'), cv2.IMREAD_GRAYSCALE)
 
     def get_coordinates(self):
         # Process image
@@ -30,8 +31,11 @@ class Screenshot:
         coord_x, coord_y = None, None
         if extracted_text != '':
             coordinates = extracted_text.split(',')
-            coord_x = int(coordinates[0])
-            coord_y = int(coordinates[1].split('N')[0][:-1])
+            try:
+                coord_x = int(coordinates[0])
+                coord_y = int(coordinates[1].split('N')[0][:-1])
+            except ValueError:
+                print('Reading error...')
 
         return coord_x, coord_y
 
@@ -40,4 +44,4 @@ class Screenshot:
         result = cv2.matchTemplate(self.image, self.archi, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
-        return max_val >= 0.8
+        return max_val >= 0.7
